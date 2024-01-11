@@ -11,7 +11,7 @@ BULLET_SPEED = 20
 FPS = 60
 SCORE = 0
 
-self_size = (800,600)
+self_size = (800, 600)
 background_image = pygame.image.load("back_ground.jpg")
 background_image = pygame.transform.scale(background_image, self_size)
 background_rect = background_image.get_rect()
@@ -23,7 +23,6 @@ tower_rect = tower_image.get_rect()
 # Colors
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
-YELLOW = (225, 225, 0)
 
 # Player properties
 player_width = 50
@@ -31,24 +30,42 @@ player_height = 50
 player_speed = 5
 scroll_x = -2
 
+PFont = pygame.font.Font('papyrus.ttf', 30)
+
+
+def create_text(text, font, text_col, x, y):
+    img = font.render(text, True, text_col)
+    screen.blit(img, (100, 100))
+
+
 def create_bullet(x, y):
     return pygame.Rect(x, y, 10, 5)
 
+
 def create_obstacle(x, y):
     return pygame.Rect(x, y, 50, 50)
+
 
 obstacles = []
 bullets = []
 
 # Create the window
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Up and Down Movement")
+pygame.display.set_caption("gaming window")
 
 # Create the player object
 player = pygame.Rect(WIDTH // 2 - player_width // 2, HEIGHT // 2 - player_height // 2, player_width, player_height)
 
-# Set up the clock
-clock = pygame.time.Clock()
+clock = pygame.time.Clock()  # Set up the clock
+pygame.mouse.set_visible(0)  # Remove Cursor visability
+
+# Set up the scoreboard, timer and difficulty increase
+
+
+# ticks = pygame.time.get_ticks()
+# seconds = ticks/10000000
+# print(ticks)
+
 
 # Game loop
 while True:
@@ -60,36 +77,37 @@ while True:
             if event.key == pygame.K_SPACE:
                 bullets.append(create_bullet(player.x + 50, player.y + 50))
 
-    scroll_x -= 5
-# Adjust the scrolling speed as needed
 
-# CREATE ZE OBSTACLES
-#     if random.randint(0, 100) < 10:
-#         obstacles.append(create_obstacle(scroll_x, 300))
 
-# Move obstacles
-# for obstacle in obstacles:
-#     obstacle.x -= obstacle_speed
+    # ticks = pygame.time.get_ticks()
+    # seconds = ticks%10000000
+    # print(seconds)
 
-# Remove obstacles that go off-screen
-# obstacles = [obstacle for obstacle in obstacles if obstacle.x + obstacle.width > 0]
-#
-# for obstacle in obstacles:
-#     if player.colliderect(obstacle):
-#     print("Game Over!")  # Replace with your game over logic
+    scroll_x -= 3.5  # Adjust the scrolling speed as needed
+
+    # CREATE ZE OBSTACLES
+    #     if random.randint(0, 100) < 10:
+    #         obstacles.append(create_obstacle(scroll_x, 300))
+
+    # Move obstacles
+    # for obstacle in obstacles:
+    #     obstacle.x -= obstacle_speed
+
+    # Remove obstacles that go off-screen
+    # obstacles = [obstacle for obstacle in obstacles if obstacle.x + obstacle.width > 0]
+    #
+    # for obstacle in obstacles:
+    #     if player.colliderect(obstacle):
+    #     print("Game Over!")  # Replace with your game over logic
 
     # Draw the background image twice to create a continuous scroll effect
     screen.blit(background_image, (scroll_x, 0))
     screen.blit(background_image, (scroll_x + background_rect.width, 0))
 
-
-    # # Reset the scroll position when the image goes off-screen
-    if scroll_x <= -background_rect.width:
+    if scroll_x <= -background_rect.width:  # Reset the scroll position when the image goes off-screen
         scroll_x = 0
 
-
-    # Get the state of all keys
-    keys = pygame.key.get_pressed()
+    keys = pygame.key.get_pressed()  # Get the state of all keys
 
     # Update player position based on key presses
     if keys[pygame.K_UP] and player.top > 0:
@@ -105,9 +123,6 @@ while True:
         bullet.x += BULLET_SPEED
         pygame.draw.rect(screen, RED, bullet)
 
-
-
-
     # Draw the player
     pygame.draw.rect(screen, RED, player)
 
@@ -115,9 +130,8 @@ while True:
     # for obstacles in obstacles:
     #     screen.blit(tower_image, (scroll_x, 0))
 
-    # Update the display
-    pygame.display.flip()
+    pygame.display.flip()  # Update the display
 
+    clock.tick(FPS)  # Cap the frame rate
 
-    # Cap the frame rate
-    clock.tick(FPS)
+    create_text("FUCK!", PFont, (0, 0, 0), 100,100)
